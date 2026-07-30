@@ -1,0 +1,11 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+
+## Visual Studio
+.vs/
+
+## Database (we don't want to commit local dev data)
+store.db

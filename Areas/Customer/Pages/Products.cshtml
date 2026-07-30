@@ -1,0 +1,25 @@
+﻿@page
+@model jewllery_keep.Areas.Customer.Pages.ProductsModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+
+
+<form method="get">
+    <input type="text" name="query" placeholder="Search..." value="@Request.Query["query"]" />
+    <button type="submit">Search</button>
+</form>
+
+<div class="products-container">
+    @foreach (var product in Model.Products)
+    {
+        <div class="product-card">
+            <img src="@product.ImageUrl" alt="@product.Name" width="150" />
+            <h2>@product.Name</h2>
+            <p>@product.Description</p>
+            <p>Price: $@product.Price</p>
+            <p>Stock: @product.Stock</p>
+        </div>
+    }
+</div>

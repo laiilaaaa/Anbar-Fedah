@@ -1,0 +1,13 @@
+﻿@page
+@model jewllery_keep.Areas.Admin.Pages.ManageProductsModel
+@{
+    Layout = "_Layout";
+}
+<h1>Manage Products</h1>
+<!--ManageProducts.cshtml-->
+<ul>
+    @foreach (var p in Model.Products)
+    {
+        <li>@p.Name - $@p.Price</li>
+    }
+</ul>

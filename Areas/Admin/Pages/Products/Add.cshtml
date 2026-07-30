@@ -1,0 +1,29 @@
+﻿@page
+@model jewllery_keep.Areas.Admin.Pages.Products.AddModel
+@{
+    ViewData["Title"] = "Add Product";
+}
+
+<h2>Add Product</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <input asp-for="Product.Name" class="form-control" placeholder="Name" />
+        <span asp-validation-for="Product.Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <input asp-for="Product.Price" class="form-control" placeholder="Price" />
+        <span asp-validation-for="Product.Price" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <textarea asp-for="Product.Description" class="form-control" placeholder="Description"></textarea>
+    </div>
+    <div class="mb-3">
+        <input asp-for="Product.ImageUrl" class="form-control" placeholder="Image URL" />
+    </div>
+    <button type="submit" class="btn btn-success">Add Product</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

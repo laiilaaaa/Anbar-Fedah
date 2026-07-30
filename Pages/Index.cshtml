@@ -1,0 +1,32 @@
+﻿@page
+@model jewllery_keep.Areas.Customer.Pages.ProductsModel
+@{
+    ViewData["Title"] = "Welcome";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">المنتجات المتاحة</h1>
+
+    <ul class="list-unstyled row">
+        @foreach (var p in Model.Products.Take(6))  @* Show only 6 preview products *@
+        {
+            <li class="col-md-4 mb-3">
+                <div class="card p-3 shadow-sm">
+                    <h5>@p.Name</h5>
+                    <p>$@p.Price</p>
+                </div>
+            </li>
+        }
+    </ul>
+
+    @*
+    <div class="text-center mt-4">
+        <button class="btn btn-gold me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+            Login
+        </button>
+        <button class="btn btn-outline-gold" data-bs-toggle="modal" data-bs-target="#registerModal">
+            Register
+        </button>
+    </div>
+    *@
+</div>
