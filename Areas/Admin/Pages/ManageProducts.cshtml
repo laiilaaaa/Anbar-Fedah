@@ -5,9 +5,44 @@
 }
 <h1>Manage Products</h1>
 <!--ManageProducts.cshtml-->
-<ul>
-    @foreach (var p in Model.Products)
-    {
-        <li>@p.Name - $@p.Price</li>
-    }
-</ul>
+
+<a asp-page="/Products/Add" asp-area="Admin" class="btn btn-success mb-3">+ Add Product</a>
+
+@if (!Model.Products.Any())
+{
+    <p>No products yet. Click "Add Product" to create your first one.</p>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model.Products)
+            {
+                <tr>
+                    <td>
+                        <img src="@p.ImageUrl" alt="@p.Name" style="width:50px; height:50px; object-fit:cover;" />
+                    </td>
+                    <td>@p.Name</td>
+                    <td>$@p.Price</td>
+                    <td>@p.Stock</td>
+                    <td class="text-end">
+                        <a asp-page="/Products/Edit" asp-area="Admin" asp-route-id="@p.Id" class="btn btn-sm btn-primary">Edit</a>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@p.Id" class="d-inline"
+                              onsubmit="return confirm('Delete @p.Name? This cannot be undone.');">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

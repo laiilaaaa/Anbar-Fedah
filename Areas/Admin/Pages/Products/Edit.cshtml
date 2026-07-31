@@ -1,12 +1,14 @@
-﻿@page
-@model jewllery_keep.Areas.Admin.Pages.Products.AddModel
+@page "{id:int}"
+@model jewllery_keep.Areas.Admin.Pages.Products.EditModel
 @{
-    ViewData["Title"] = "Add Product";
+    ViewData["Title"] = "Edit Product";
 }
 
-<h2>Add Product</h2>
+<h2>Edit Product</h2>
 
 <form method="post">
+    <input type="hidden" asp-for="Product.Id" />
+
     <div class="mb-3">
         <input asp-for="Product.Name" class="form-control" placeholder="Name" />
         <span asp-validation-for="Product.Name" class="text-danger"></span>
@@ -25,7 +27,9 @@
     <div class="mb-3">
         <input asp-for="Product.ImageUrl" class="form-control" placeholder="Image URL" />
     </div>
-    <button type="submit" class="btn btn-success">Add Product</button>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+    <a asp-page="/ManageProducts" asp-area="Admin" class="btn btn-secondary">Cancel</a>
 </form>
 
 @section Scripts {

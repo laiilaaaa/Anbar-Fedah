@@ -17,42 +17,54 @@
     <!-- STICKY HEADER / NAVBAR -->
     <header class="sticky-header">
         <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom mb-3">
-            <div class="container-fluid d-flex justify-content-between">
+            <!-- direction:ltr forces the 3 columns into a fixed left/center/right order
+                 regardless of the page being RTL, so "left" and "right" always mean
+                 the visual left/right side of the screen. -->
+            <div class="container-fluid navbar-3col" style="direction: ltr;">
 
-                <!-- RIGHT SIDE: Brand -->
-                <a class="navbar-brand fw-bold ms-auto" asp-area="" asp-page="/Index"> متجر للفضة</a>
+                <!-- LEFT: Cart + Search icon -->
+                <div class="d-flex align-items-center justify-content-start" style="gap: 16px;">
+                    <a href="/Customer/Cart">
+                        <img src="~/images/shopping cart.png" alt="Cart" style="width:28px; height:28px;">
+                    </a>
+                    <button type="button" class="icon-btn" onclick="openCategoryPanel()" aria-label="Search">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </div>
 
-                <!-- LEFT SIDE: Search + Buttons -->
-                <div class="d-flex align-items-center">
+                <!-- CENTER: Brand -->
+                <div class="text-center">
+                    <a class="navbar-brand fw-bold m-0" asp-area="" asp-page="/Index" style="direction: rtl; display:inline-block;"> متجر للفضة</a>
+                </div>
 
-                    <!-- 1️ Search Bar -->
-                    <form class="flex-grow-1" asp-area="Customer" asp-page="/Products" method="get">
-                        <input class="form-control search-input" type="search" name="query"
-                               placeholder="ابحث عن منتجات..."
-                               onkeydown="if(evt.key==='Enter'){this.form.submit();}">
-                    </form>
-
-                    <!-- 2 Centered Cart Icon -->
-                    <div class="mx-3 d-flex justify-content-center" style="width:60px;">
-                        <a href="/Customer/Cart">
-                            <img src="~/images/shopping cart.png" alt="Cart" style="width:28px; height:28px;">
-                        </a>
-                    </div>
-
-                    <!-- 3️ Buttons -->
-                    <ul class="navbar-nav d-flex align-items-center">
+                <!-- RIGHT: Login / Register, or profile icon once signed in -->
+                <div class="d-flex align-items-center justify-content-end" dir="rtl" style="direction: rtl;">
+                    <ul class="navbar-nav d-flex align-items-center flex-row">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item me-2">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">
-                                    مرحباً @User.Identity?.Name!
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
-                                      asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-                                    <button type="submit" class="btn btn-link text-dark border-0">تسجيل الخروج</button>
-                                </form>
+                            <li class="nav-item dropdown">
+                                <button class="profile-icon-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                        <path d="M4 21v-1a8 8 0 0 1 16 0v1"></path>
+                                    </svg>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" dir="rtl">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
+                                            مرحباً @User.Identity?.Name!
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <form asp-area="Identity" asp-page="/Account/Logout"
+                                              asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                                            <button type="submit" class="dropdown-item">تسجيل الخروج</button>
+                                        </form>
+                                    </li>
+                                </ul>
                             </li>
                         }
                         else
@@ -71,12 +83,37 @@
                             </li>
                         }
                     </ul>
-
                 </div>
 
             </div>
         </nav>
     </header>
+
+    <!-- SLIDE-IN SEARCH / CATEGORY PANEL -->
+    <div class="category-panel-overlay" id="categoryOverlay" onclick="closeCategoryPanel()"></div>
+    <div class="category-panel" id="categoryPanel">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <strong>البحث والتصنيفات</strong>
+            <button type="button" class="close-panel-btn" onclick="closeCategoryPanel()" aria-label="Close">×</button>
+        </div>
+
+        <form asp-area="Customer" asp-page="/Products" method="get">
+            <input class="search-input-small" type="search" name="query"
+                   placeholder="ابحث عن منتجات...">
+        </form>
+
+        <ul class="category-list">
+            @for (int i = 1; i <= 7; i++)
+            {
+                <li>
+                    <form asp-area="Customer" asp-page="/Products" method="get">
+                        <input type="hidden" name="category" value="cat@(i)" />
+                        <button type="submit">cat@(i)</button>
+                    </form>
+                </li>
+            }
+        </ul>
+    </div>
 
     <div class="container">
         <main role="main" class="pb-3">
@@ -148,6 +185,16 @@
                 document.getElementById('registerForm').style.display = 'block';
                 document.getElementById('authTitle').innerText = 'إنشاء حساب';
             }
+        }
+
+        function openCategoryPanel() {
+            document.getElementById('categoryPanel').classList.add('open');
+            document.getElementById('categoryOverlay').classList.add('open');
+        }
+
+        function closeCategoryPanel() {
+            document.getElementById('categoryPanel').classList.remove('open');
+            document.getElementById('categoryOverlay').classList.remove('open');
         }
     </script>
 

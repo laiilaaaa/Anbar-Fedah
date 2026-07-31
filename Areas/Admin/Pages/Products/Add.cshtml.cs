@@ -27,8 +27,8 @@ namespace jewllery_keep.Areas.Admin.Pages.Products
             _db.Products.Add(Product);
             _db.SaveChanges();
 
-            // Redirect to product list page after adding
-            return RedirectToPage("/Products/Index", new { area = "Customer" });
+            // Redirect to the admin's product management page after adding
+            return RedirectToPage("/ManageProducts", new { area = "Admin" });
         }
     }
 }
